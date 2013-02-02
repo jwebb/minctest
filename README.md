@@ -1,7 +1,7 @@
 MinCTest
 ========
 
-Copyright (c) 2013 Corect Code Ltd.
+Copyright (c) 2013 Correct Code Ltd.
 
 MinCTest is a simple and concise unit testing framework for C. It depends
 only on the standard library, so it should be portable to any modern compiler.
@@ -51,7 +51,7 @@ int main(int argc, char** argv)
 Command line
 ------------
 
-Currently mc_run accepts a single command line option: --verbose prints the name
+Currently mc_run accepts a single command line option: `--verbose` prints the name
 of every test as it is run.
 
 Assertions
