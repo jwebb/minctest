@@ -85,9 +85,11 @@ void mc_test_internal(const char* name, void (*fn)());
 #define mc_bytes_eq(length, left, right) \
 	do { \
 		mc_checkpoint(); \
+		size_t len = (length); \
 		const char* l = (left); \
 		const char* r = (right); \
-		if (!mc_assert_internal(!memcmp(l, r, (length)), "Expected %s == %s, but not equal", #left, #right)) \
+		if (!mc_assert_internal(!memcmp(l, r, len), "Expected %s == %s, but left:\n\n%s\n  vs right:\n\n%s", \
+				#left, #right, mc_hexdump(len, l), mc_hexdump(len, r))) \
 			return; \
 	} while (0)
 
@@ -105,6 +107,9 @@ bool mc_assert_internal(bool pass, const char* fmt, ...);
 /* Notes the current source location, reported in event of e.g. segfault. */
 #define mc_checkpoint() mc_checkpoint_internal(__FILE__, __LINE__)
 void mc_checkpoint_internal(const char* file, int line);
+
+/* Returns an mc_alloc'd string containing a hex dump of the given bytes. */
+const char* mc_hexdump(size_t len, const void* bytes);
 
 /* Allocates memory, which will be automatically free'd at the end of the
 current test. Aborts if the memory cannot be allocated. */

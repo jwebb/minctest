@@ -215,6 +215,36 @@ void mc_checkpoint_internal(const char* file, int line)
 	}
 }
 
+const char* mc_hexdump(size_t len, const void* bytes)
+{
+	int stop = (len > 0x1000 ? 0x1000 : len);
+	int bufsize = (stop + 15) / 16 * (4 + 1 + 48 + 16 + 1) + 5;
+	char* buf = mc_alloc(bufsize);
+	char row[17];
+	int pos = 0;
+	row[16] = 0;
+
+	for (int i = 0; i < stop; i += 16) {
+		pos += sprintf(buf + pos, "%04x ", i);
+		for (int j = 0; j < 16; ++j) {
+			if (i + j < stop) {
+				char c = ((char*) bytes)[i + j];
+				pos += sprintf(buf + pos, "%02x ", c);
+				row[j] = (c > ' ' && c <= '~' ? c : '.');
+			} else {
+				pos += sprintf(buf + pos, "   ");
+				row[j] = ' ';
+			}
+		}
+		pos += sprintf(buf + pos, "%s\n", row);
+	}
+	if (stop < len) {
+		pos += sprintf(buf + pos, "...\n");
+	}
+
+	return buf;
+}
+
 void* mc_alloc(size_t size)
 {
 	void** buf = calloc(1, size + sizeof(void*));

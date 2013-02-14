@@ -74,11 +74,17 @@ static void example_signal()
 #endif
 }
 
+static void example_hex_dump()
+{
+	mc_bytes_eq(20, "This\tis the\0 first!\n", "This is\r\nthe second!");
+}
+
 void negative_tests()
 {
 	mc_test(example_equal_failure);
 	mc_test(example_explicit_failure);
 	mc_test(example_signal);
+	mc_test(example_hex_dump);
 }
 
 int main(int argc, char** argv)
