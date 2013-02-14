@@ -64,6 +64,7 @@ static suite* last_suite = NULL;
 static suite* current_suite = NULL;
 static test* current_test = NULL;
 static int test_index = 0;
+static void** allocs = NULL;
 
 static void parse_args(int argc, char** argv);
 static void run_suite(suite* s);
@@ -214,6 +215,25 @@ void mc_checkpoint_internal(const char* file, int line)
 	}
 }
 
+void* mc_alloc(size_t size)
+{
+	void** buf = calloc(1, size + sizeof(void*));
+	*buf = allocs;
+	allocs = buf;
+	return ((void*) buf) + sizeof(void*);
+}
+
+static void free_allocs()
+{
+	void** curr = allocs;
+	while (curr) {
+		void** next = *curr;
+		free(curr);
+		curr = next;
+	}
+	allocs = NULL;
+}
+
 static void parse_args(int argc, char** argv)
 {
 	for (int i = 1; i < argc; ++i) {
@@ -237,6 +257,7 @@ static void run_suite(suite* s)
 	do {
 		test_index = 0;
 		run_with_signals_caught(s);
+		free_allocs();
 
 		if (s->setup.result != PASSED) {
 			++s->failures;

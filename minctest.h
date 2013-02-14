@@ -106,4 +106,8 @@ bool mc_assert_internal(bool pass, const char* fmt, ...);
 #define mc_checkpoint() mc_checkpoint_internal(__FILE__, __LINE__)
 void mc_checkpoint_internal(const char* file, int line);
 
+/* Allocates memory, which will be automatically free'd at the end of the
+current test. Aborts if the memory cannot be allocated. */
+void* mc_alloc(size_t size);
+
 #endif
