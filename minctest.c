@@ -233,6 +233,7 @@ static void run_suite(suite* s)
 	current_suite = s;
 	current_test = &s->setup;
 
+	int crash_count = 0;
 	do {
 		test_index = 0;
 		run_with_signals_caught(s);
@@ -243,9 +244,16 @@ static void run_suite(suite* s)
 		}
 
 		++s->test_count;
+
 		// Having run the suite, test_index ends up with the number of
-		// tests in the suite, and test_count with the number that have run
-	} while (test_index > s->test_count);
+		// tests found in the suite (which may be less than the actual
+		// number if a test crashed), and test_count with the number that have
+		// run to completion.
+		if (test_index < s->test_count)
+			++crash_count;
+		if (crash_count > 5)
+			break;
+	} while (test_index != s->test_count);
 }
 
 static void print_failures(suite* s)
