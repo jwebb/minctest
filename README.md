@@ -78,7 +78,7 @@ mc_bytes_ne(bytes1, bytes2, length)
 UNIX signals
 ------------
 
-MinCTest has some support for handling signals, if it's built with MC_UNIX
-defined. In this case, signals such as SEGV will simply cause the current test
+MinCTest has some support for handling signals, if it's built with `MC_UNIX`
+defined. In this case, signals such as `SEGV` will simply cause the current test
 to fail. This may or may not be useful, depending on how messed up the program
 state gets...
