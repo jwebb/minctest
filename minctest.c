@@ -229,7 +229,7 @@ const char* mc_hexdump(size_t len, const void* bytes)
 		for (int j = 0; j < 16; ++j) {
 			if (i + j < stop) {
 				char c = ((char*) bytes)[i + j];
-				pos += sprintf(buf + pos, "%02x ", c);
+				pos += sprintf(buf + pos, "%02x ", c & 0xff);
 				row[j] = (c > ' ' && c <= '~' ? c : '.');
 			} else {
 				pos += sprintf(buf + pos, "   ");
