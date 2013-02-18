@@ -117,8 +117,12 @@ void mc_checkpoint_internal(const char* file, int line);
 /* Returns an mc_alloc'd string containing a hex dump of the given bytes. */
 const char* mc_hexdump(size_t len, const void* bytes);
 
+/* Registers the given cleanup function with the given argument to run once
+the current test has finished. */
+void* mc_cleanup(void (*cleanup_fn)(void*), void* data);
+
 /* Allocates memory, which will be automatically free'd at the end of the
-current test. Aborts if the memory cannot be allocated. */
+current test. */
 void* mc_alloc(size_t size);
 
 #endif

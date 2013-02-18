@@ -81,6 +81,20 @@ mc_bytes_eq(bytes1, bytes2, length)
 mc_bytes_ne(bytes1, bytes2, length)
 ```
 
+Allocation and cleanup
+----------------------
+
+MinCTest provides `void* mc_cleanup(void (*cleaner_fn)(void*), void* data)` to
+record a cleanup action that will always execute after the current test finishes.
+It also provides the shortcut `void* mc_alloc(size_t size)`, which is equivalent
+to `mc_cleanup(free, calloc(1, size))`.
+
+Hex dumps
+---------
+
+The function `const char* mc_hexdump(size_t length, void* data)` is used internally,
+but is also available to client code as a debugging convenience.
+
 UNIX signals
 ------------
 

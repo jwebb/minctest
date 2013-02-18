@@ -58,13 +58,19 @@ typedef struct suite {
 	struct suite* next;
 } suite;
 
+typedef struct cleanup {
+	void (*fn)(void *);
+	void* data;
+	struct cleanup* next;
+} cleanup;
+
 static bool verbose = false;
 static suite* first_suite = NULL;
 static suite* last_suite = NULL;
 static suite* current_suite = NULL;
 static test* current_test = NULL;
 static int test_index = 0;
-static void** allocs = NULL;
+static cleanup* cleanups = NULL;
 
 static void parse_args(int argc, char** argv);
 static void run_suite(suite* s);
@@ -247,21 +253,36 @@ const char* mc_hexdump(size_t len, const void* bytes)
 
 void* mc_alloc(size_t size)
 {
-	void** buf = calloc(1, size + sizeof(void*));
-	*buf = allocs;
-	allocs = buf;
-	return ((void*) buf) + sizeof(void*);
+	void* data = calloc(1, size);
+	if (!data)
+		return NULL;
+
+	return mc_cleanup(free, data);
 }
 
-static void free_allocs()
+void* mc_cleanup(void (*cleanup_fn)(void*), void* data)
 {
-	void** curr = allocs;
+	cleanup* node = malloc(sizeof(cleanup));
+	if (!node)
+		return NULL;
+
+	node->fn = cleanup_fn;
+	node->data = data;
+	node->next = cleanups;
+	cleanups = node;
+	return data;
+}
+
+static void run_cleanups()
+{
+	cleanup* curr = cleanups;
 	while (curr) {
-		void** next = *curr;
+		cleanup* next = curr->next;
+		(curr->fn)(curr->data);
 		free(curr);
 		curr = next;
 	}
-	allocs = NULL;
+	cleanups = NULL;
 }
 
 static void parse_args(int argc, char** argv)
@@ -287,7 +308,7 @@ static void run_suite(suite* s)
 	do {
 		test_index = 0;
 		run_with_signals_caught(s);
-		free_allocs();
+		run_cleanups();
 
 		if (s->setup.result != PASSED) {
 			++s->failures;
