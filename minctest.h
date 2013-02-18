@@ -79,6 +79,12 @@ void mc_test_internal(const char* name, void (*fn)());
 #define mc_int_lt(left, right) mc_general_cmp(int, left, right, l < r, "Expected %s < %s, but %d >= %d")
 #define mc_int_ge(left, right) mc_general_cmp(int, left, right, l >= r, "Expected %s >= %s, but %d < %d")
 #define mc_int_le(left, right) mc_general_cmp(int, left, right, l <= r, "Expected %s <= %s, but %d > %d")
+#define mc_uint64_eq(left, right) mc_general_cmp(uint64_t, left, right, l == r, "Expected %s == %s, but %lld != %lld")
+#define mc_uint64_ne(left, right) mc_general_cmp(uint64_t, left, right, l != r, "Expected %s !== %s, but %lld == %lld")
+#define mc_uint64_gt(left, right) mc_general_cmp(uint64_t, left, right, l > r, "Expected %s > %s, but %lld <= %lld")
+#define mc_uint64_lt(left, right) mc_general_cmp(uint64_t, left, right, l < r, "Expected %s < %s, but %lld >= %lld")
+#define mc_uint64_ge(left, right) mc_general_cmp(uint64_t, left, right, l >= r, "Expected %s >= %s, but %lld < %lld")
+#define mc_uint64_le(left, right) mc_general_cmp(uint64_t, left, right, l <= r, "Expected %s <= %s, but %lld > %lld")
 #define mc_str_eq(left, right) mc_general_cmp(const char*, left, right, !strcmp(l, r), "Expected %s == %s, but '%s' != '%s'")
 #define mc_str_ne(left, right) mc_general_cmp(const char*, left, right, strcmp(l, r), "Expected %s != %s, but '%s' == '%s'")
 
