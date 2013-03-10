@@ -51,8 +51,13 @@ int main(int argc, char** argv)
 Command line
 ------------
 
-Currently mc_run accepts a single command line option: `--verbose` prints the name
-of every test as it is run.
+Currently mc_run accepts the following command line options:
+
+`--verbose` prints the name of every test as it is run.
+
+`--both-outputs` causes test names to be written to stdout as they are run,
+in addition to the usual progress information on stderr. Useful if stdout is
+used to capture logging for the code under test.
 
 Assertions
 ----------

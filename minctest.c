@@ -65,6 +65,7 @@ typedef struct cleanup {
 } cleanup;
 
 static bool verbose = false;
+static bool both_outputs = false;
 static suite* first_suite = NULL;
 static suite* last_suite = NULL;
 static suite* current_suite = NULL;
@@ -156,6 +157,8 @@ void mc_test_internal(const char* name, void (*fn)())
 		if (test_index == current_suite->test_count) {
 			if (verbose)
 				fprintf(stderr, "  Test: %s... ", name);
+			if (both_outputs)
+				printf("\n# Test: %s\n", name);
 
 			test* t = calloc(1, sizeof(test));
 			t->name = name;
@@ -288,11 +291,12 @@ static void run_cleanups()
 static void parse_args(int argc, char** argv)
 {
 	for (int i = 1; i < argc; ++i) {
-		if (!strcmp(argv[i], "--verbose")) {
+		if (!strcmp(argv[i], "--verbose"))
 			verbose = true;
-			break;
-		}
-		fprintf(stderr, "Warning: unrecognised command line argument: %s\n", argv[i]);
+		else if (!strcmp(argv[i], "--both-outputs"))
+			both_outputs = true;
+		else
+			fprintf(stderr, "Warning: unrecognised command line argument: %s\n", argv[i]);
 	}
 }
 
@@ -300,6 +304,8 @@ static void run_suite(suite* s)
 {
 	if (verbose)
 		fprintf(stderr, "Suite: %s\n", s->name);
+	if (both_outputs)
+		printf("\n\n# Suite: %s\n", s->name);
 
 	current_suite = s;
 	current_test = &s->setup;
