@@ -67,44 +67,44 @@ void mc_test_internal(const char* name, void (*fn)());
 #define mc_general_cmp(type, left, right, op, msg) \
 	do { \
 		mc_checkpoint(); \
-		type l = (left); \
-		type r = (right); \
-		if (!mc_assert_internal(op, msg, #left, #right, l, r)) \
+		type l__ = (left); \
+		type r__ = (right); \
+		if (!mc_assert_internal(op, msg, #left, #right, l__, r__)) \
 			return; \
 	} while (0)
 
-#define mc_int_eq(left, right) mc_general_cmp(int, left, right, l == r, "Expected %s == %s, but %d != %d")
-#define mc_int_ne(left, right) mc_general_cmp(int, left, right, l != r, "Expected %s !== %s, but %d == %d")
-#define mc_int_gt(left, right) mc_general_cmp(int, left, right, l > r, "Expected %s > %s, but %d <= %d")
-#define mc_int_lt(left, right) mc_general_cmp(int, left, right, l < r, "Expected %s < %s, but %d >= %d")
-#define mc_int_ge(left, right) mc_general_cmp(int, left, right, l >= r, "Expected %s >= %s, but %d < %d")
-#define mc_int_le(left, right) mc_general_cmp(int, left, right, l <= r, "Expected %s <= %s, but %d > %d")
-#define mc_uint64_eq(left, right) mc_general_cmp(uint64_t, left, right, l == r, "Expected %s == %s, but %lld != %lld")
-#define mc_uint64_ne(left, right) mc_general_cmp(uint64_t, left, right, l != r, "Expected %s !== %s, but %lld == %lld")
-#define mc_uint64_gt(left, right) mc_general_cmp(uint64_t, left, right, l > r, "Expected %s > %s, but %lld <= %lld")
-#define mc_uint64_lt(left, right) mc_general_cmp(uint64_t, left, right, l < r, "Expected %s < %s, but %lld >= %lld")
-#define mc_uint64_ge(left, right) mc_general_cmp(uint64_t, left, right, l >= r, "Expected %s >= %s, but %lld < %lld")
-#define mc_uint64_le(left, right) mc_general_cmp(uint64_t, left, right, l <= r, "Expected %s <= %s, but %lld > %lld")
-#define mc_str_eq(left, right) mc_general_cmp(const char*, left, right, !strcmp(l, r), "Expected %s == %s, but '%s' != '%s'")
-#define mc_str_ne(left, right) mc_general_cmp(const char*, left, right, strcmp(l, r), "Expected %s != %s, but '%s' == '%s'")
+#define mc_int_eq(left, right) mc_general_cmp(int, left, right, l__ == r__, "Expected %s == %s, but %d != %d")
+#define mc_int_ne(left, right) mc_general_cmp(int, left, right, l__ != r__, "Expected %s !== %s, but %d == %d")
+#define mc_int_gt(left, right) mc_general_cmp(int, left, right, l__ > r__, "Expected %s > %s, but %d <= %d")
+#define mc_int_lt(left, right) mc_general_cmp(int, left, right, l__ < r__, "Expected %s < %s, but %d >= %d")
+#define mc_int_ge(left, right) mc_general_cmp(int, left, right, l__ >= r__, "Expected %s >= %s, but %d < %d")
+#define mc_int_le(left, right) mc_general_cmp(int, left, right, l__ <= r__, "Expected %s <= %s, but %d > %d")
+#define mc_uint64_eq(left, right) mc_general_cmp(uint64_t, left, right, l__ == r__, "Expected %s == %s, but %lld != %lld")
+#define mc_uint64_ne(left, right) mc_general_cmp(uint64_t, left, right, l__ != r__, "Expected %s !== %s, but %lld == %lld")
+#define mc_uint64_gt(left, right) mc_general_cmp(uint64_t, left, right, l__ > r__, "Expected %s > %s, but %lld <= %lld")
+#define mc_uint64_lt(left, right) mc_general_cmp(uint64_t, left, right, l__ < r__, "Expected %s < %s, but %lld >= %lld")
+#define mc_uint64_ge(left, right) mc_general_cmp(uint64_t, left, right, l__ >= r__, "Expected %s >= %s, but %lld < %lld")
+#define mc_uint64_le(left, right) mc_general_cmp(uint64_t, left, right, l__ <= r__, "Expected %s <= %s, but %lld > %lld")
+#define mc_str_eq(left, right) mc_general_cmp(const char*, left, right, !strcmp(l__, r__), "Expected %s == %s, but '%s' != '%s'")
+#define mc_str_ne(left, right) mc_general_cmp(const char*, left, right, strcmp(l__, r__), "Expected %s != %s, but '%s' == '%s'")
 
 #define mc_bytes_eq(length, left, right) \
 	do { \
 		mc_checkpoint(); \
-		size_t len = (length); \
-		const char* l = (left); \
-		const char* r = (right); \
-		if (!mc_assert_internal(!memcmp(l, r, len), "Expected %s == %s, but left:\n\n%s\n  vs right:\n\n%s", \
-				#left, #right, mc_hexdump(len, l), mc_hexdump(len, r))) \
+		size_t len__ = (length); \
+		const char* l__ = (left); \
+		const char* r__ = (right); \
+		if (!mc_assert_internal(!memcmp(l__, r__, len__), "Expected %s == %s, but left:\n\n%s\n  vs right:\n\n%s", \
+				#left, #right, mc_hexdump(len__, l__), mc_hexdump(len__, r__))) \
 			return; \
 	} while (0)
 
 #define mc_bytes_ne(length, left, right) \
 	do { \
 		mc_checkpoint(); \
-		const char* l = (left); \
-		const char* r = (right); \
-		if (!mc_assert_internal(memcmp(l, r, (length)), "Expected %s != %s, but equal'", #left, #right)) \
+		const char* l__ = (left); \
+		const char* r__ = (right); \
+		if (!mc_assert_internal(memcmp(l__, r__, (length)), "Expected %s != %s, but equal'", #left, #right)) \
 			return; \
 	} while (0)
 
